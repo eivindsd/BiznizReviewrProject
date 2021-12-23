@@ -1,6 +1,4 @@
-package it.unipi.lsmsdb.biznizreviewrproject.entities.business;
-
-import it.unipi.lsmsdb.biznizreviewrproject.entities.review.Review;
+package it.unipi.lsmsdb.biznizreviewrproject.entities;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,6 @@
-package it.unipi.lsmsdb.biznizreviewrproject.entities.user;
+package it.unipi.lsmsdb.biznizreviewrproject.entities;
 
 
-import it.unipi.lsmsdb.biznizreviewrproject.entities.review.Review;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
@@ -9,11 +8,14 @@ import java.util.List;
 
 public class User {
 
+    @Id
+    private Object _id;
     private String user_id;
     public String name;
     public List<Review> reviews = new ArrayList<>();
 
-    public User(String user_id, String name) {
+    public User(Object _id, String user_id, String name) {
+        this._id = _id;
         this.user_id = user_id;
         this.name = name;
     }
@@ -21,7 +23,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + user_id + '\'' +
+                "_id=" + _id +
+                ", user_id='" + user_id + '\'' +
                 ", name='" + name + '\'' +
                 ", reviews=" + reviews +
                 '}';

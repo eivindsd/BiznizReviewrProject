@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.biznizreviewrproject.entities.review;
+package it.unipi.lsmsdb.biznizreviewrproject.entities;
 
 public class Review {
 

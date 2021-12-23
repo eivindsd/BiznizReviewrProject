@@ -1,52 +1,49 @@
 package it.unipi.lsmsdb.biznizreviewrproject;
 
-import it.unipi.lsmsdb.biznizreviewrproject.entities.business.Business;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.business.BusinessRepository;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.review.ReviewRepository;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.user.User;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.user.UserRepository;
+import it.unipi.lsmsdb.biznizreviewrproject.entities.User;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @SpringBootApplication
 public class BiznizReviewrProjectApplication implements CommandLineRunner {
 
     //Får error ved å ha flere repositories samtidig ... men bør nok lese meg litt opp på det
     @Autowired
-    //private UserRepository userRepository;
-    private BusinessRepository businessRepository;
+    private UserRepository userRepository;
+    //private BusinessRepository businessRepository;
     //private ReviewRepository reviewRepository;
 
-/*
-    public void createUser(String id, String name) {
-        userRepository.save(new User(id, name));
+
+    //kun lov med unike navn på brukere
+    public void createUser(Object _id, String user_id, String name) {
+        if(findUser(name) == null) {
+            userRepository.save(new User(_id, user_id, name));
+        }
     }
 
-    public List<User> findUsers(String username) {
-        return new ArrayList<>(userRepository.findByName(username));
+    //nå er det kun for unike brukernavn, funker ikke hvis flere heter det samme
+    public User findUser(String username) {
+        return userRepository.findByName(username);
     }
 
     //hvilke attributter skal kunne oppdateres?
     public void updateUser(String name) {
     }
 
-    //Tror det letteste er å delete på navn, men "_id" i mongodb gjør det litt vanskelig
-    public void deleteUser(String id) {
 
+    public void deleteUser(String name) {
+        if(findUser(name) != null) {
+            userRepository.delete((User) userRepository.findByName(name));
+        }
     }
 
- */
 
+    /*
     public void createBusiness(String business_id, String name, String city, String state, String stars, String categories) {
         businessRepository.save(new Business(business_id, name, city, state, stars, categories));
     }
@@ -66,11 +63,11 @@ public class BiznizReviewrProjectApplication implements CommandLineRunner {
     }
 
     //Samme som deleteUser, usikker på hvordan gjøre dette på best måte
-    public void deleteBusiness(String id) {
+    public void deleteBusiness(String name) {
 
     }
 
-
+*/
 
     public static void main(String[] args) {
         SpringApplication.run(BiznizReviewrProjectApplication.class, args);
@@ -79,11 +76,9 @@ public class BiznizReviewrProjectApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        //Create a new User:
-        //createUser("id", "Eivind");
 
-        //Search for User:
-        //System.out.println(findUsers("Jane"));
+        //Search for User :
+        System.out.println(findUser("silly"));
 
         //Search for Business by City:
         //System.out.println(businessRepository.findByCity("Portland"));

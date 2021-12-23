@@ -1,5 +1,6 @@
-package it.unipi.lsmsdb.biznizreviewrproject.entities.business;
+package it.unipi.lsmsdb.biznizreviewrproject.repository;
 
+import it.unipi.lsmsdb.biznizreviewrproject.entities.Business;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
