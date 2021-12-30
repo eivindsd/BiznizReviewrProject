@@ -1,18 +1,16 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
-
-import it.unipi.lsmsdb.biznizreviewrproject.model.Business;
 import it.unipi.lsmsdb.biznizreviewrproject.model.User;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -22,13 +20,21 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         try {
-            List<User> tutorials = new ArrayList<>(userRepository.findAll());
-            if (tutorials.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(tutorials, HttpStatus.OK);
+            List<User> users;
+            //Creates a Pageable object - page: zero-based page index (must not be negative),
+            //size: number of items in a page to be returned, must be greater than 0.
+            Pageable paging =  PageRequest.of(page, size);
+            Page<User> pageUsers;
+            //Page<T> findAll(Pageable pageable) returns a Page of entities meeting the paging
+            //condition provided by Pageable object.
+            pageUsers = userRepository.findAll(paging);
+            users = pageUsers.getContent();
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
