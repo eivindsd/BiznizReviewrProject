@@ -15,12 +15,12 @@ public class Business {
     private String country;
     private String city;
     private String state;
-    private String topTags;
+    private List<String> topTags;
     private int stars;
     private List<String> categories;
     private List<Review> reviews;
 
-    public Business(String businessid, String name, String country, String city, String state, String topTags, int stars, List<String> categories, List<Review> reviews) {
+    public Business(String businessid, String name, String country, String city, String state, List<String> topTags, int stars, List<String> categories, List<Review> reviews) {
         this.businessid = businessid;
         this.name = name;
         this.country = country;
@@ -72,11 +72,11 @@ public class Business {
         this.state = state;
     }
 
-    public String getTopTags() {
+    public List<String> getTopTags() {
         return topTags;
     }
 
-    public void setTopTags(String topTags) {
+    public void setTopTags(List<String> topTags) {
         this.topTags = topTags;
     }
 

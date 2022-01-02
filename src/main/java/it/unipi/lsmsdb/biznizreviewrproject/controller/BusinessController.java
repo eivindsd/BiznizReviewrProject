@@ -145,8 +145,6 @@ public class BusinessController {
         }
     }
 
-
-
     @DeleteMapping("/business/{businessid}")
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
         try {
