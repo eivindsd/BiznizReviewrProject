@@ -3,7 +3,6 @@ package it.unipi.lsmsdb.biznizreviewrproject.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Document("business")
@@ -13,27 +12,24 @@ public class Business {
 
     private String businessid;
     private String name;
+    private String country;
     private String city;
     private String state;
+    private String topTags;
     private int stars;
     private List<String> categories;
-    private List<Review> reviews = new ArrayList<>();
+    private List<Review> reviews;
 
-    public Business(String businessid, String name, String city, String state, int stars, List<String> categories) {
+    public Business(String businessid, String name, String country, String city, String state, String topTags, int stars, List<String> categories, List<Review> reviews) {
         this.businessid = businessid;
         this.name = name;
+        this.country = country;
         this.city = city;
         this.state = state;
+        this.topTags = topTags;
         this.stars = stars;
         this.categories = categories;
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
+        this.reviews = reviews;
     }
 
     public String getBusinessid() {
@@ -52,6 +48,14 @@ public class Business {
         this.name = name;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getCity() {
         return city;
     }
@@ -66,6 +70,14 @@ public class Business {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getTopTags() {
+        return topTags;
+    }
+
+    public void setTopTags(String topTags) {
+        this.topTags = topTags;
     }
 
     public int getStars() {
