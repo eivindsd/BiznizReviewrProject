@@ -27,11 +27,7 @@ public class BusinessController {
     public ResponseEntity<Business> getBusinessById(@PathVariable("businessid") String businessId) {
         try {
             Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessid(businessId));
-            if (business.isPresent()) {
-                return new ResponseEntity<>(business.get(), HttpStatus.OK);
-            }
-            else
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return business.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -41,8 +37,7 @@ public class BusinessController {
     @GetMapping("/business/name/{name}")
     public ResponseEntity<List<Business>> getBusinessesByName(@PathVariable("name") String name) {
         try {
-            List<Business> businesses = new ArrayList<>();
-            businessRepository.findByName(name).forEach(businesses::add);
+            List<Business> businesses = new ArrayList<>(businessRepository.findByName(name));
             if (businesses.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -74,8 +69,7 @@ public class BusinessController {
     @GetMapping("business/city/{city}")
     public ResponseEntity<List<Business>> getBusinessesByCity(@PathVariable("city") String city) {
         try {
-            List<Business> businesses = new ArrayList<>();
-            businessRepository.findByCity(city).forEach(businesses::add);
+            List<Business> businesses = new ArrayList<>(businessRepository.findByCity(city));
             if (businesses.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -88,8 +82,7 @@ public class BusinessController {
     @GetMapping("business/country/{country}")
     public ResponseEntity<List<Business>> getBusinessesByCountry(@PathVariable("country") String country) {
         try {
-            List<Business> businesses = new ArrayList<>();
-            businessRepository.findByCountry(country).forEach(businesses::add);
+            List<Business> businesses = new ArrayList<>(businessRepository.findByCountry(country));
             if (businesses.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -102,8 +95,7 @@ public class BusinessController {
     @GetMapping("business/state/{state}")
     public ResponseEntity<List<Business>> getBusinessesByState(@PathVariable("state") String state) {
         try {
-            List<Business> businesses = new ArrayList<>();
-            businessRepository.findByState(state).forEach(businesses::add);
+            List<Business> businesses = new ArrayList<>(businessRepository.findByState(state));
             if (businesses.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
