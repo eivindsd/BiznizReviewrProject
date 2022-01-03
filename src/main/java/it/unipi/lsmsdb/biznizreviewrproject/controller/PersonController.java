@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.PersonEntity;
-import it.unipi.lsmsdb.biznizreviewrproject.repositories.PersonRepository;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

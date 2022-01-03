@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.MovieEntity;
-import it.unipi.lsmsdb.biznizreviewrproject.repositories.MovieRepository;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
