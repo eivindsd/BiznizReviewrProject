@@ -21,8 +21,8 @@ public class MovieController {
     public Flux<MovieEntity> all() {
         return this.movieRepository.findAll();
     }
-/*
-    @PostMapping(path = "")
+
+    @PostMapping(path = "/")
     public Mono<MovieEntity> create(@RequestBody MovieEntity movie) {
         return this.movieRepository.save(movie);
     }
