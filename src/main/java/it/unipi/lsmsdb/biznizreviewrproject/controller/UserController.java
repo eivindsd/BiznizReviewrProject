@@ -93,6 +93,31 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/name/{name}/{password}")
+    public ResponseEntity<User> getUserByNameAndPassword(@PathVariable("name") String name, @PathVariable("password") String password) {
+        try {
+            List<User> users = new ArrayList<>(userRepository.findByName(name));
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            boolean passwordmatch = false;
+            User usermatch = null;
+            for(User user: users) {
+                if(Objects.equals(user.getPassword(), password)) {
+                    usermatch = user;
+                    passwordmatch = true;
+                }
+            }
+            if(!passwordmatch) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(usermatch, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("user/{userId}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
         try {
