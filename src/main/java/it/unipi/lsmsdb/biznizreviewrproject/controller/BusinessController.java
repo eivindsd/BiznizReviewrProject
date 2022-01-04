@@ -130,12 +130,14 @@ public class BusinessController {
             _business.setTopTags(business.getTopTags());
             _business.setStars(business.getStars());
             _business.setCategories(business.getCategories());
+            _business.setReviews(business.getReviews());
             return new ResponseEntity<>(businessRepository.save(_business), HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     @DeleteMapping("/business/{businessid}")
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
