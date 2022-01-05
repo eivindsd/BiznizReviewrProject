@@ -96,10 +96,39 @@ public class AggregationController {
         Aggregation aggregation = newAggregation(matchBusinessId, unwindReviews, groupByStars);
         try {
             StarsPerBusiness starsPerBusiness = mongoTemplate.aggregate(aggregation,"business", StarsPerBusiness.class).getUniqueMappedResult();
+            System.out.println(starsPerBusiness);
             if(starsPerBusiness == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(starsPerBusiness, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/amountofstarsperuser/{userId}")
+    public ResponseEntity<StarsPerUser> getStarsPerUser(@PathVariable("userId") String userId) {
+        MatchOperation matchUserId = match(new Criteria("userId").is(userId));
+        UnwindOperation unwindReviews = unwind("reviews");
+        GroupOperation groupByStars = group("userId")
+                .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(5))
+                        .then(1).otherwise(0)).as("amountFive")
+                .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(4))
+                        .then(1).otherwise(0)).as("amountFour")
+                .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(3))
+                        .then(1).otherwise(0)).as("amountThree")
+                .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(2))
+                        .then(1).otherwise(0)).as("amountTwo")
+                .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(1))
+                        .then(1).otherwise(0)).as("amountOne");
+        Aggregation aggregation = newAggregation(matchUserId, unwindReviews, groupByStars);
+        try {
+            StarsPerUser starsPerUser = mongoTemplate.aggregate(aggregation,"user", StarsPerUser.class).getUniqueMappedResult();
+            System.out.println(starsPerUser);
+            if(starsPerUser == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(starsPerUser, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
