@@ -1,11 +1,8 @@
-package it.unipi.lsmsdb.biznizreviewrproject.repositories;
+package it.unipi.lsmsdb.biznizreviewrproject.repository;
 
 import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowRelationship;
 import it.unipi.lsmsdb.biznizreviewrproject.entities.UserGraphEntity;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
-import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;

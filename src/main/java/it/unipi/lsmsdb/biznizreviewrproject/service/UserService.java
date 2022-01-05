@@ -3,12 +3,9 @@ package it.unipi.lsmsdb.biznizreviewrproject.service;
 
 import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowDTO;
 import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowRelationship;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.UserGraphEntity;
-import it.unipi.lsmsdb.biznizreviewrproject.repositories.UserGraphRepository;
-import reactor.core.publisher.Mono;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 
 @Service
 @Transactional

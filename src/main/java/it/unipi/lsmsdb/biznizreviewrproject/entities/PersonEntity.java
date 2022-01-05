@@ -14,6 +14,4 @@ public class PersonEntity {
     @Id
     private String name;
     private Integer born;
-
-
 }

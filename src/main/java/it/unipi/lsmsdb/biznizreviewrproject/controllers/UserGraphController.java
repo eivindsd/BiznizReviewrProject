@@ -1,28 +1,20 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controllers;
 
-import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowDTO;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowRelationship;
 import it.unipi.lsmsdb.biznizreviewrproject.entities.UserGraphEntity;
-import it.unipi.lsmsdb.biznizreviewrproject.repositories.UserGraphRepository;
-import it.unipi.lsmsdb.biznizreviewrproject.service.UserService;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController()
-@RequestMapping(value = "/api/graph")
+@RequestMapping(value = "/api/graph/user")
 @RequiredArgsConstructor
 public class UserGraphController {
-
-    private final UserService userService;
     private final UserGraphRepository userGraphRepository;
 
     @GetMapping(value = "/")
@@ -30,7 +22,7 @@ public class UserGraphController {
         return this.userGraphRepository.findAll();
     }
 
-    @GetMapping(value = "/user/{userId}")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<UserGraphEntity> getUserById(@PathVariable("userId") String userId) {
         try {
             UserGraphEntity user = userGraphRepository.findByUserId(userId);
@@ -41,7 +33,7 @@ public class UserGraphController {
         }
     }
 
-    @PostMapping("/user")
+    @PostMapping("/")
     public ResponseEntity<UserGraphEntity> createUser(@RequestBody UserGraphEntity user) {
         try {
             String userId = UUID.randomUUID().toString();
@@ -61,7 +53,22 @@ public class UserGraphController {
         }
     }
 
-    @DeleteMapping(value = "/user/{userId}")
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserGraphEntity> updateUser(@PathVariable("userId") String userId, @RequestBody UserGraphEntity user) {
+        Optional<UserGraphEntity> tutorialData = Optional.ofNullable(userGraphRepository.findByUserId(userId));
+
+        if (tutorialData.isPresent()) {
+            UserGraphEntity _user = tutorialData.get();
+            if (user.getName() != null) {
+                _user.setName(user.getName());
+            }
+            return new ResponseEntity<>(userGraphRepository.save(_user), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "/{userId}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
         try {
             userGraphRepository.deleteByUserId(userId);
