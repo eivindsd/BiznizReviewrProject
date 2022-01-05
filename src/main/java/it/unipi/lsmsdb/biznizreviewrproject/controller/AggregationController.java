@@ -96,7 +96,6 @@ public class AggregationController {
         Aggregation aggregation = newAggregation(matchBusinessId, unwindReviews, groupByStars);
         try {
             StarsPerBusiness starsPerBusiness = mongoTemplate.aggregate(aggregation,"business", StarsPerBusiness.class).getUniqueMappedResult();
-            System.out.println(starsPerBusiness);
             if(starsPerBusiness == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -124,7 +123,6 @@ public class AggregationController {
         Aggregation aggregation = newAggregation(matchUserId, unwindReviews, groupByStars);
         try {
             StarsPerUser starsPerUser = mongoTemplate.aggregate(aggregation,"user", StarsPerUser.class).getUniqueMappedResult();
-            System.out.println(starsPerUser);
             if(starsPerUser == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
