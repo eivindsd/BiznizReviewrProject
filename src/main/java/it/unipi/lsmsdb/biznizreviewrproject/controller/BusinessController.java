@@ -143,7 +143,7 @@ public class BusinessController {
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
         try {
             businessRepository.deleteByBusinessid(businessId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
          catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

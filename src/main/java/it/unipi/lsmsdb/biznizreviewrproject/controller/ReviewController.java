@@ -64,7 +64,7 @@ public class ReviewController {
             if (user.isPresent()) {
                 List<Review> reviews = user.get().getReviews();
                 for (Review review: reviews) {
-                    if (Objects.equals(review.getReview_id(), reviewId)) {
+                    if (Objects.equals(review.getReviewId(), reviewId)) {
                         return new ResponseEntity<>(review, HttpStatus.OK);
                     }
                 }
@@ -83,7 +83,7 @@ public class ReviewController {
             if (business.isPresent()) {
                 List<Review> reviews = business.get().getReviews();
                 for (Review review: reviews) {
-                    if (Objects.equals(review.getReview_id(), reviewId)) {
+                    if (Objects.equals(review.getReviewId(), reviewId)) {
                         return new ResponseEntity<>(review, HttpStatus.OK);
                     }
                 }
@@ -105,7 +105,7 @@ public class ReviewController {
                                                @PathVariable("userId") String userId) {
 
             UUID uuid = UUID.randomUUID();
-            Review _review = new Review(uuid.toString(), userId, businessId, review.getStars(), review.getText() );
+            Review _review = new Review(uuid.toString(), userId, businessId, review.getStars(), review.getText(), review.getBusiness_name() );
             Business _business = businessRepository.findByBusinessid(businessId);
             User _user = userRepository.findByUserId(userId);
             if (_user != null & _business != null) {
@@ -126,21 +126,22 @@ public class ReviewController {
                                                @PathVariable("userId") String userId) {
         Business _business = businessRepository.findByBusinessid(businessId);
         User _user = userRepository.findByUserId(userId);
-        Review _review = new Review(review.getReview_id(), userId, businessId, review.getStars(), review.getText() );
+        Review _review = new Review(review.getReviewId(), userId, businessId, review.getStars(), review.getText(), review.getBusiness_name() );
         try {
-        if (_user != null){
-                Review oldUserReview = getReviewById(_user.getReviews(), review.getReview_id());
-                _user.getReviews().remove(oldUserReview);
-                _user.getReviews().add(_review);
-                _userController.updateUser(userId, _user);
-        if (_business != null) {
-                Review oldBusinessReview = getReviewById(_business.getReviews(), review.getReview_id());
-                _business.getReviews().remove(oldBusinessReview);
-                _business.getReviews().add(_review);
-                _businessController.updateBusiness(businessId, _business);
-               }
-        return new  ResponseEntity<>(_review, HttpStatus.OK);
-        }}
+            if (_user != null){
+                    Review oldUserReview = getReviewById(_user.getReviews(), review.getReviewId());
+                    _user.getReviews().remove(oldUserReview);
+                    _user.getReviews().add(_review);
+                    _userController.updateUser(userId, _user);
+            if (_business != null) {
+                    Review oldBusinessReview = getReviewById(_business.getReviews(), review.getReviewId());
+                    _business.getReviews().remove(oldBusinessReview);
+                    _business.getReviews().add(_review);
+                    _businessController.updateBusiness(businessId, _business);
+                   }
+            return new  ResponseEntity<>(_review, HttpStatus.OK);
+            }
+        }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -149,7 +150,7 @@ public class ReviewController {
 
     public Review getReviewById(List<Review> reviewList, String reviewId) {
         for (Review rev: reviewList) {
-            if (rev.getReview_id().compareTo(reviewId) == 0) {
+            if (rev.getReviewId().compareTo(reviewId) == 0) {
                 return rev;
             }
         }
