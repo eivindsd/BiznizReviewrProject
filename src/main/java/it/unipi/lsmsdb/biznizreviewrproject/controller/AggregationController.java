@@ -28,7 +28,8 @@ public class AggregationController {
     public ResponseEntity<List<StarsPerState>> getAverageStarsPerState() {
         MatchOperation onlyUsa = match(new Criteria("state").ne(null));
         GroupOperation groupByStateAndAvgStars = group("state").avg("$stars").as("avgStars");
-        Aggregation aggregation = newAggregation(onlyUsa,groupByStateAndAvgStars);
+        SortOperation sortByAvgStarsState = sort(Sort.by(Sort.Direction.DESC, "avgStars"));
+        Aggregation aggregation = newAggregation(onlyUsa,groupByStateAndAvgStars, sortByAvgStarsState);
         try {
             List<StarsPerState> starsPerState = new ArrayList<>(
                     mongoTemplate.aggregate(aggregation,"business", StarsPerState.class).getMappedResults());
@@ -45,7 +46,9 @@ public class AggregationController {
     public ResponseEntity<List<StarsPerCity>> getAverageStarsPerCity() {
         GroupOperation groupByStateAndAvgStars = group("city").avg("$stars").as("avgStars");
         MatchOperation onlyRated = match(new Criteria("avgStars").ne(0));
-        Aggregation aggregation = newAggregation(groupByStateAndAvgStars, onlyRated);
+        SortOperation sortByAvgStarsCity = sort(Sort.by(Sort.Direction.DESC, "avgStars"));
+        LimitOperation limitToXDocs = limit(11);
+        Aggregation aggregation = newAggregation(groupByStateAndAvgStars, onlyRated, sortByAvgStarsCity, limitToXDocs);
         try {
             List<StarsPerCity> starsPerCity = new ArrayList<>(
                     mongoTemplate.aggregate(aggregation,"business", StarsPerCity.class).getMappedResults());
@@ -64,7 +67,7 @@ public class AggregationController {
         ProjectionOperation project = project().andInclude("city").and("reviews").size().as("numberOfReviews");
         GroupOperation groupByCityAndAvgReviews = group("city").avg("numberOfReviews").as("avgReviews");
         SortOperation sortByAvgReviewsDecs = sort(Sort.by(Sort.Direction.DESC, "avgReviews"));
-        LimitOperation limitToXDocs = limit(5);
+        LimitOperation limitToXDocs = limit(11);
         Aggregation aggregation = newAggregation(reviewed, project, groupByCityAndAvgReviews, sortByAvgReviewsDecs, limitToXDocs);
         try {
             List<ReviewsPerCity> reviewsPerCity = new ArrayList<>(
