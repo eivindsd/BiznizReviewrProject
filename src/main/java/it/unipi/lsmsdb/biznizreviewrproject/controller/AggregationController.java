@@ -81,11 +81,11 @@ public class AggregationController {
         }
     }
 
-    @GetMapping("/amountofstarsperbusiness/{businessid}")
-    public ResponseEntity<StarsPerBusiness> getStarsPerBusiness(@PathVariable("businessid") String businessId) {
-        MatchOperation matchBusinessId = match(new Criteria("businessid").is(businessId).and("stars").gt(0));
+    @GetMapping("/amountofstarsperbusiness/{businessId}")
+    public ResponseEntity<StarsPerBusiness> getStarsPerBusiness(@PathVariable("businessId") String businessId) {
+        MatchOperation matchBusinessId = match(new Criteria("businessId").is(businessId).and("stars").gt(0));
         UnwindOperation unwindReviews = unwind("reviews");
-        GroupOperation groupByStars = group("businessid")
+        GroupOperation groupByStars = group("businessId")
                 .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(5))
                         .then(1).otherwise(0)).as("amountFive")
                 .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(4))
