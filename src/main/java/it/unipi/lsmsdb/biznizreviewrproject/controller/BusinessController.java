@@ -131,6 +131,7 @@ public class BusinessController {
             _business.setTopTags(business.getTopTags());
             _business.setStars(business.getStars());
             _business.setCategories(business.getCategories());
+            _business.setReviews(business.getReviews());
             return new ResponseEntity<>(businessRepository.save(_business), HttpStatus.OK);
         }
         else {
@@ -138,11 +139,12 @@ public class BusinessController {
         }
     }
 
+
     @DeleteMapping("/business/{businessid}")
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
         try {
             businessRepository.deleteByBusinessid(businessId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
          catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
