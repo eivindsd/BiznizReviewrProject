@@ -41,7 +41,7 @@ public class BusinessGraphController {
         }
     }
     @PutMapping("/{businessId}")
-    public ResponseEntity<BusinessGraphEntity> updatebusiness(@PathVariable("businessId") String businessId, @RequestBody BusinessGraphEntity business) {
+    public ResponseEntity<BusinessGraphEntity> updateBusiness(@PathVariable("businessId") String businessId, @RequestBody BusinessGraphEntity business) {
         Optional<BusinessGraphEntity> tutorialData = Optional.ofNullable(businessGraphRepository.findByBusinessId(businessId));
 
         if (tutorialData.isPresent()) {
