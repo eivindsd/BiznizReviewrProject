@@ -2,6 +2,7 @@ package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.User;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -43,12 +45,8 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            //generate userid
-            String userId = UUID.randomUUID().toString();
-            while (userRepository.findByUserId(userId) != null) {
-                userId = UUID.randomUUID().toString();
-            }
-            User _user = userRepository.save(new User(userId, user.getName(), user.getPassword()));
+            //theoretically there might be generated users with same userid now
+            User _user = userRepository.save(new User(user.getUserId(), user.getName(), user.getPassword()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,6 +91,31 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/name/{name}/{password}")
+    public ResponseEntity<User> getUserByNameAndPassword(@PathVariable("name") String name, @PathVariable("password") String password) {
+        try {
+            List<User> users = new ArrayList<>(userRepository.findByName(name));
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            boolean passwordmatch = false;
+            User usermatch = null;
+            for(User user: users) {
+                if(Objects.equals(user.getPassword(), password)) {
+                    usermatch = user;
+                    passwordmatch = true;
+                }
+            }
+            if(!passwordmatch) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(usermatch, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("user/{userId}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
         try {
@@ -102,8 +125,5 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 
 }
