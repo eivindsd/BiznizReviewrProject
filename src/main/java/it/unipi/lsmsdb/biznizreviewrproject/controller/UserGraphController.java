@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController()
 @RequestMapping(value = "/api/graph/user")
 @RequiredArgsConstructor
@@ -36,18 +37,9 @@ public class UserGraphController {
     @PostMapping("/")
     public ResponseEntity<UserGraphEntity> createUser(@RequestBody UserGraphEntity user) {
         try {
-            String userId = UUID.randomUUID().toString();
-            //  while (userGraphRepository.findById(userId) != null) {
-            //    userId = UUID.randomUUID().toString();
-            // }
-            System.out.println("userId = " + userId);
-            System.out.println("name = " + user.getName());
-            System.out.println("user = " + user);
-            UserGraphEntity _user = userGraphRepository.save(new UserGraphEntity(userId, user.getName()));
-            System.out.println("Saved user" + _user);
+            UserGraphEntity _user = userGraphRepository.save(new UserGraphEntity(user.getUserId(), user.getName()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println(e.toString());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }

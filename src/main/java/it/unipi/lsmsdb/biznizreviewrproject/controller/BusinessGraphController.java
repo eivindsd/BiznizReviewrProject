@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController()
 @RequestMapping(value = "/api/graph/business")
 @RequiredArgsConstructor
