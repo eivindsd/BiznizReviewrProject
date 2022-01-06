@@ -24,10 +24,10 @@ public class BusinessController {
     @Autowired
     BusinessRepository businessRepository;
 
-    @GetMapping("business/{businessid}")
-    public ResponseEntity<Business> getBusinessById(@PathVariable("businessid") String businessId) {
+    @GetMapping("business/{businessId}")
+    public ResponseEntity<Business> getBusinessById(@PathVariable("businessId") String businessId) {
         try {
-            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessid(businessId));
+            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
             return business.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
         }
         catch (Exception e) {
@@ -46,6 +46,24 @@ public class BusinessController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/business/search/{name}")
+    public ResponseEntity<List<Business>> getAllBusinessesContainingString(@PathVariable("name") String name) {
+        List<Business> businesses = new ArrayList<>();
+        List<Business> allBusinesses = businessRepository.findAll();
+        for (Business bus:allBusinesses) {
+            if (bus.getName().contains(name) & businesses.size() < 10) {
+                businesses.add(bus);
+            }
+            if (businesses.size() == 10) {
+                break;
+            }
+        }
+        if (!businesses.isEmpty()) {
+            return new ResponseEntity<>(businesses, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/business")
@@ -121,7 +139,7 @@ public class BusinessController {
 
     @PutMapping("/business/{businessId}")
     public ResponseEntity<Business> updateBusiness(@PathVariable("businessId") String businessId, @RequestBody Business business) {
-        Optional<Business> businessData = Optional.ofNullable(businessRepository.findByBusinessid(businessId));
+        Optional<Business> businessData = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
         if (businessData.isPresent()) {
             Business _business = businessData.get();
             _business.setName(business.getName());
@@ -143,7 +161,7 @@ public class BusinessController {
     @DeleteMapping("/business/{businessid}")
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
         try {
-            businessRepository.deleteByBusinessid(businessId);
+            businessRepository.deleteByBusinessId(businessId);
             return new ResponseEntity<>(HttpStatus.OK);
         }
          catch (Exception e) {

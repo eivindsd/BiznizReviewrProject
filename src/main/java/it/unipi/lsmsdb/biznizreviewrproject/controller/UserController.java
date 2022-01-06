@@ -2,16 +2,17 @@ package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.User;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -40,6 +41,27 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @GetMapping("/user/search/{name}")
+    @Query()
+    public ResponseEntity<List<User>> getAllUsersContainingString(@PathVariable("name") String name) {
+        List<User> users = new ArrayList<>();
+        List<User> allUsers = userRepository.findAll();
+        for (User u: allUsers) {
+            if (u.getName().contains(name) & users.size() < 10) {
+                users.add(u);
+            }
+            if (users.size() == 10) {
+                break;
+            }
+        }
+        if (!users.isEmpty()) {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
     @PostMapping("/user")
