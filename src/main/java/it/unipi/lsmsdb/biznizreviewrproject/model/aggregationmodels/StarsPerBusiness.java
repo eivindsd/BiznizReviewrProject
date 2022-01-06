@@ -5,19 +5,19 @@ import org.springframework.data.annotation.Id;
 public class StarsPerBusiness {
 
     @Id
-    private String businessid;
+    private String businessId;
     private int amountFive;
     private int amountFour;
     private int amountThree;
     private int amountTwo;
     private int amountOne;
 
-    public String getBusinessid() {
-        return businessid;
+    public String getBusinessId() {
+        return businessId;
     }
 
-    public void setBusinessid(String businessid) {
-        this.businessid = businessid;
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
     }
 
     public int getAmountFive() {
