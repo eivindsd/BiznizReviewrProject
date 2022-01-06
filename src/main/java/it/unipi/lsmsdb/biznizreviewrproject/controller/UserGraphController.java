@@ -1,6 +1,8 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
+import it.unipi.lsmsdb.biznizreviewrproject.model.BusinessGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.BusinessGraphRepository;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @CrossOrigin
@@ -17,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserGraphController {
     private final UserGraphRepository userGraphRepository;
+    private final BusinessGraphRepository businessGraphRepository;
 
     @GetMapping(value = "/")
     public List<UserGraphEntity> all() {
@@ -57,6 +61,37 @@ public class UserGraphController {
             return new ResponseEntity<>(userGraphRepository.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/follow/{userId1}/{userId2}")
+    public ResponseEntity<UserGraphEntity> follow(@PathVariable("userId1") String userId1, @PathVariable("userId2") String userId2) {
+        Optional<UserGraphEntity> user1 = Optional.ofNullable(userGraphRepository.findByUserId(userId1));
+        Optional<UserGraphEntity> user2 = Optional.ofNullable(userGraphRepository.findByUserId(userId2));
+
+        if (user1.isPresent() && user2.isPresent()) {
+            UserGraphEntity _user = user1.get();
+            Set<UserGraphEntity> follows = _user.getFollows();
+            follows.add(user2.get());
+            return new ResponseEntity<>(userGraphRepository.save(_user), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/review/{userId}/{businessId}")
+    public ResponseEntity<UserGraphEntity> review(@PathVariable("userId") String userId, @PathVariable("businessId") String businessId) {
+        Optional<UserGraphEntity> user = Optional.ofNullable(userGraphRepository.findByUserId(userId));
+        Optional<BusinessGraphEntity> business = Optional.ofNullable(businessGraphRepository.findByBusinessId(businessId));
+
+        if (user.isPresent() && business.isPresent()) {
+            UserGraphEntity _user = user.get();
+            Set<BusinessGraphEntity> reviewedBusinesses = _user.getReviewedBusinesses();
+            reviewedBusinesses.add(business.get());
+            return new ResponseEntity<>(userGraphRepository.save(_user), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         }
     }
 
