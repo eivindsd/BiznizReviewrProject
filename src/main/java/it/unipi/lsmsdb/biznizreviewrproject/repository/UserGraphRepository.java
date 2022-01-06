@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.biznizreviewrproject.repository;
 
-import it.unipi.lsmsdb.biznizreviewrproject.entities.FollowRelationship;
-import it.unipi.lsmsdb.biznizreviewrproject.entities.UserGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.model.FollowRelationship;
+import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;

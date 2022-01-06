@@ -1,6 +1,6 @@
-package it.unipi.lsmsdb.biznizreviewrproject.controllers;
+package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
-import it.unipi.lsmsdb.biznizreviewrproject.entities.UserGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

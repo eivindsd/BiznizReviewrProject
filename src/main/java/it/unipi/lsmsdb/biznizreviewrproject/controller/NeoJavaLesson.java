@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.biznizreviewrproject.controllers;
+package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;

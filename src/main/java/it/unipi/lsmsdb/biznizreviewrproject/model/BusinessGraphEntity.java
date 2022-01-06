@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.biznizreviewrproject.entities;
+package it.unipi.lsmsdb.biznizreviewrproject.model;
 
 
 import lombok.*;
