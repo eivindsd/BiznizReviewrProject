@@ -7,6 +7,8 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, String> {
 
@@ -14,13 +16,19 @@ public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, St
     void deleteByUserId(String userId);
 
 
+    @Query(value = "MATCH (a:User {userId: $userId })-[r:FOLLOWS]-(b)\n" +
+            "RETURN DISTINCT b")
+    List<UserGraphEntity> getFollowing(@Param("userId") String userId);
+
+
+    /*
     @Query(value = "MATCH (a:User), (b:User) \n" +
             "WHERE a.userId = :#{#userId} AND b.userId = :#" +
             "{#userId}\n)" +
             "CREATE (a)-[r:FOLLOWS]->(b)")
     @Transactional
     FollowRelationship createFollowRelationship(@Param("userId") String userId1, @Param("userId") String userId2);
-
+     */
 
 
 }

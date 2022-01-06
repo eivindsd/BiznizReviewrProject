@@ -16,10 +16,12 @@ public class UserService {
     public UserService(UserGraphRepository userGraphRepository) {
         this.userGraphRepository = userGraphRepository;
     }
-
+/*
     public FollowRelationship createFollowRelationship(FollowDTO followDTO) {
 
         return userGraphRepository.createFollowRelationship(followDTO.getUserId1(), followDTO.getUserId2());
     }
+
+ */
 
 }

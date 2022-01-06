@@ -38,6 +38,18 @@ public class UserGraphController {
         }
     }
 
+    @GetMapping(value = "/following/{userId}")
+    public ResponseEntity<List<UserGraphEntity>> getFollowing(@PathVariable("userId") String userId) {
+        try {
+            List<UserGraphEntity> following = userGraphRepository.getFollowing(userId);
+            System.out.println(following);
+            return new ResponseEntity<>(following, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/")
     public ResponseEntity<UserGraphEntity> createUser(@RequestBody UserGraphEntity user) {
         try {
