@@ -1,12 +1,14 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.BusinessGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.BusinessGraphRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,6 +55,18 @@ public class BusinessGraphController {
             return new ResponseEntity<>(businessGraphRepository.save(_business), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "/suggestions/{userId}")
+    public ResponseEntity<List<BusinessGraphEntity>> getSuggestion(@PathVariable("userId") String userId) {
+        try {
+            List<BusinessGraphEntity> suggestions = businessGraphRepository.getSuggestions(userId);
+            System.out.println(suggestions);
+            return new ResponseEntity<>(suggestions, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

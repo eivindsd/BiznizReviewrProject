@@ -21,6 +21,13 @@ public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, St
     List<UserGraphEntity> getFollowing(@Param("userId") String userId);
 
 
+    @Query(value = "MATCH (a:User {userId: $userId })-[:FOLLOWS]->(friend)-[:FOLLOWS]->(suggestion)" +
+            "RETURN suggestion" )
+    List<UserGraphEntity> getSuggestions(@Param("userId") String userId);
+
+
+
+
     /*
     @Query(value = "MATCH (a:User), (b:User) \n" +
             "WHERE a.userId = :#{#userId} AND b.userId = :#" +

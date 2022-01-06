@@ -1,6 +1,7 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.BusinessGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.model.User;
 import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.BusinessGraphRepository;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
@@ -44,6 +45,18 @@ public class UserGraphController {
             List<UserGraphEntity> following = userGraphRepository.getFollowing(userId);
             System.out.println(following);
             return new ResponseEntity<>(following, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/suggestions/{userId}")
+    public ResponseEntity<List<UserGraphEntity>> getSuggestion(@PathVariable("userId") String userId) {
+        try {
+            List<UserGraphEntity> suggestions = userGraphRepository.getSuggestions(userId);
+            System.out.println(suggestions);
+            return new ResponseEntity<>(suggestions, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.toString());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
