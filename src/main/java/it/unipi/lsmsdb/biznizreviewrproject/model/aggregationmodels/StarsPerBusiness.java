@@ -12,6 +12,14 @@ public class StarsPerBusiness {
     private int amountTwo;
     private int amountOne;
 
+    public StarsPerBusiness(int amountFive, int amountFour, int amountThree, int amountTwo, int amountOne) {
+        this.amountFive = amountFive;
+        this.amountFour = amountFour;
+        this.amountThree = amountThree;
+        this.amountTwo = amountTwo;
+        this.amountOne = amountOne;
+    }
+
     public String getBusinessId() {
         return businessId;
     }
