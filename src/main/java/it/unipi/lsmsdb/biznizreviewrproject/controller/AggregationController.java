@@ -83,7 +83,7 @@ public class AggregationController {
 
     @GetMapping("/amountofstarsperbusiness/{businessId}")
     public ResponseEntity<StarsPerBusiness> getStarsPerBusiness(@PathVariable("businessId") String businessId) {
-        MatchOperation matchBusinessId = match(new Criteria("businessId").is(businessId).and("stars").gt(0));
+        MatchOperation matchBusinessId = match(new Criteria("businessId").is(businessId).and("stars").gt(-1));
         UnwindOperation unwindReviews = unwind("reviews");
         GroupOperation groupByStars = group("businessId")
                 .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(5))
@@ -100,7 +100,8 @@ public class AggregationController {
         try {
             StarsPerBusiness starsPerBusiness = mongoTemplate.aggregate(aggregation,"business", StarsPerBusiness.class).getUniqueMappedResult();
             if(starsPerBusiness == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                StarsPerBusiness emptyStars = new StarsPerBusiness(0,0,0,0,0);
+                return new ResponseEntity<>(emptyStars, HttpStatus.OK);
             }
             return new ResponseEntity<>(starsPerBusiness, HttpStatus.OK);
         } catch (Exception e) {

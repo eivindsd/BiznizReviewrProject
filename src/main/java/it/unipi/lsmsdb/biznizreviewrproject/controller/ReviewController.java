@@ -162,17 +162,19 @@ public class ReviewController {
     public ResponseEntity<HttpStatus> deleteReview(@PathVariable("reviewId") String reviewId,
                                                    @PathVariable("businessId") String businessId,
                                                    @PathVariable("userId") String userId) {
-        Business _business = businessRepository.findByBusinessId(businessId);
-        User _user = userRepository.findByUserId(userId);
+        Optional<Business> _business = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
+        Optional<User> _user = Optional.ofNullable(userRepository.findByUserId(userId));
         try {
-            if (_user != null){
-                Review oldUserReview = getReviewById(_user.getReviews(), reviewId);
-                _user.getReviews().remove(oldUserReview);
-                _userController.updateUser(userId, _user);
-                if (_business != null) {
-                    Review oldBusinessReview = getReviewById(_business.getReviews(), reviewId);
-                    _business.getReviews().remove(oldBusinessReview);
-                    _businessController.updateBusiness(businessId, _business);
+            if (_user.isPresent() || _business.isPresent()){
+                if (_user.isPresent()) {
+                    Review oldUserReview = getReviewById(_user.get().getReviews(), reviewId);
+                    _user.get().getReviews().remove(oldUserReview);
+                    _userController.updateUser(userId, _user.get());
+                }
+                if (_business.isPresent()) {
+                    Review oldBusinessReview = getReviewById(_business.get().getReviews(), reviewId);
+                    _business.get().getReviews().remove(oldBusinessReview);
+                    _businessController.updateBusiness(businessId, _business.get());
                 }
                 return new  ResponseEntity<>(HttpStatus.OK);
             }}
