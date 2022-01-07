@@ -16,7 +16,6 @@ public class User {
     private String name;
     private String password;
     private List<Review> reviews = new ArrayList<>();
-    private List<Friend> friends = new ArrayList<>();
     private boolean admin;
 
     public User(String userId, String name, String password) {
@@ -63,14 +62,6 @@ public class User {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
-    }
-
-    public List<Friend> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<Friend> friends) {
-        this.friends = friends;
     }
 
     public boolean isAdmin() {
