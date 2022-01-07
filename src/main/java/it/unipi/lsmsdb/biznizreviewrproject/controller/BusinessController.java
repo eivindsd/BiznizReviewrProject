@@ -142,14 +142,30 @@ public class BusinessController {
         Optional<Business> businessData = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
         if (businessData.isPresent()) {
             Business _business = businessData.get();
-            _business.setName(business.getName());
-            _business.setCountry(business.getCountry());
-            _business.setCity(business.getCity());
-            _business.setState(business.getState());
-            _business.setTopTags(business.getTopTags());
-            _business.setStars(business.getStars());
-            _business.setCategories(business.getCategories());
-            _business.setReviews(business.getReviews());
+            if(business.getName() != null) {
+                _business.setName(business.getName());
+            }
+            if(business.getCountry() != null) {
+                _business.setCountry(business.getCountry());
+            }
+            if(business.getCity() != null) {
+                _business.setCity(business.getCity());
+            }
+            if(business.getState() != null) {
+                _business.setState(business.getState());
+            }
+            if(business.getTopTags() != null) {
+                _business.setTopTags(business.getTopTags());
+            }
+            if(business.getStars() != 0) {
+                _business.setStars(business.getStars());
+            }
+            if(business.getCategories() != null) {
+                _business.setCategories(business.getCategories());
+            }
+            if(business.getReviews() != null) {
+                _business.setReviews(business.getReviews());
+            }
             return new ResponseEntity<>(businessRepository.save(_business), HttpStatus.OK);
         }
         else {
