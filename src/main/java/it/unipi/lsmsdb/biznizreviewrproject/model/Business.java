@@ -10,7 +10,7 @@ public class Business {
     @Id
     private String _id;
 
-    private String businessid;
+    private String businessId;
     private String name;
     private String country;
     private String city;
@@ -20,8 +20,8 @@ public class Business {
     private List<String> categories;
     private List<Review> reviews;
 
-    public Business(String businessid, String name, String country, String city, String state, List<String> topTags, int stars, List<String> categories, List<Review> reviews) {
-        this.businessid = businessid;
+    public Business(String businessId, String name, String country, String city, String state, List<String> topTags, int stars, List<String> categories, List<Review> reviews) {
+        this.businessId = businessId;
         this.name = name;
         this.country = country;
         this.city = city;
@@ -32,12 +32,12 @@ public class Business {
         this.reviews = reviews;
     }
 
-    public String getBusinessid() {
-        return businessid;
+    public String getBusinessId() {
+        return businessId;
     }
 
-    public void setBusinessid(String businessid) {
-        this.businessid = businessid;
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
     }
 
     public String getName() {

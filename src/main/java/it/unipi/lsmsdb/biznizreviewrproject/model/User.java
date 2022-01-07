@@ -2,6 +2,7 @@ package it.unipi.lsmsdb.biznizreviewrproject.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class User {
     private String password;
     private List<Review> reviews = new ArrayList<>();
     private List<Friend> friends = new ArrayList<>();
+    private boolean admin;
 
     public User(String userId, String name, String password) {
         this.userId = userId;
@@ -69,6 +71,10 @@ public class User {
 
     public void setFriends(List<Friend> friends) {
         this.friends = friends;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 
     @Override

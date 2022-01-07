@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class ReviewController {
@@ -27,7 +28,7 @@ public class ReviewController {
     @GetMapping("review/business/{businessid}")
     public ResponseEntity<List<Review>> getReviewsByBusinessId(@PathVariable("businessid") String businessId) {
         try {
-            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessid(businessId));
+            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
             if (business.isPresent()) {
                 List<Review> reviews = business.get().getReviews();
                 if (!reviews.isEmpty()) {
@@ -79,7 +80,7 @@ public class ReviewController {
     public ResponseEntity<Review> getReviewByBusiness(@PathVariable("businessId") String businessId,
                                                   @PathVariable("reviewId") String reviewId) {
         try {
-            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessid(businessId));
+            Optional<Business> business = Optional.ofNullable(businessRepository.findByBusinessId(businessId));
             if (business.isPresent()) {
                 List<Review> reviews = business.get().getReviews();
                 for (Review review: reviews) {
@@ -106,7 +107,7 @@ public class ReviewController {
 
             UUID uuid = UUID.randomUUID();
             Review _review = new Review(uuid.toString(), userId, businessId, review.getStars(), review.getText(), review.getBusiness_name() );
-            Business _business = businessRepository.findByBusinessid(businessId);
+            Business _business = businessRepository.findByBusinessId(businessId);
             User _user = userRepository.findByUserId(userId);
             if (_user != null & _business != null) {
                 _business.getReviews().add(_review);
@@ -124,7 +125,7 @@ public class ReviewController {
     public ResponseEntity<Review> updateReview(@RequestBody Review review,
                                                @PathVariable("businessId") String businessId,
                                                @PathVariable("userId") String userId) {
-        Business _business = businessRepository.findByBusinessid(businessId);
+        Business _business = businessRepository.findByBusinessId(businessId);
         User _user = userRepository.findByUserId(userId);
         Review _review = new Review(review.getReviewId(), userId, businessId, review.getStars(), review.getText(), review.getBusiness_name() );
         try {
@@ -161,7 +162,7 @@ public class ReviewController {
     public ResponseEntity<HttpStatus> deleteReview(@PathVariable("reviewId") String reviewId,
                                                    @PathVariable("businessId") String businessId,
                                                    @PathVariable("userId") String userId) {
-        Business _business = businessRepository.findByBusinessid(businessId);
+        Business _business = businessRepository.findByBusinessId(businessId);
         User _user = userRepository.findByUserId(userId);
         try {
             if (_user != null){
