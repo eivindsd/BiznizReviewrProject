@@ -14,6 +14,7 @@ public interface BusinessRepository extends MongoRepository<Business, String> {
     List<Business> findByCountry(String string);
     List<Business> findByState(String string);
     Business deleteByBusinessId(String string);
+    List<Business> findByNameStartingWith(String regexp);
 
 
 }
