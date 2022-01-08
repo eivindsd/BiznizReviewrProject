@@ -50,18 +50,10 @@ public class BusinessController {
 
     @GetMapping("/business/search/{name}")
     public ResponseEntity<List<Business>> getAllBusinessesContainingString(@PathVariable("name") String name) {
-        List<Business> businesses = new ArrayList<>();
-        List<Business> allBusinesses = businessRepository.findAll();
-        for (Business bus:allBusinesses) {
-            if (bus.getName().contains(name) & businesses.size() < 10) {
-                businesses.add(bus);
-            }
-            if (businesses.size() == 10) {
-                break;
-            }
-        }
-        if (!businesses.isEmpty()) {
-            return new ResponseEntity<>(businesses, HttpStatus.OK);
+        List<Business> allBusinesses = businessRepository.findByNameStartingWith(name);
+
+        if (!allBusinesses.isEmpty()) {
+            return new ResponseEntity<>(allBusinesses, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
