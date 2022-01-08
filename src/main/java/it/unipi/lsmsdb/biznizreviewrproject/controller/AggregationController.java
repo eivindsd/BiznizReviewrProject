@@ -27,10 +27,9 @@ public class AggregationController {
     @GetMapping("/avgstarsstate")
     public ResponseEntity<List<StarsPerState>> getAverageStarsPerState() {
         MatchOperation onlyUsa = match(new Criteria("state").ne(null));
-        UnwindOperation unwindReviews = unwind("reviews");
-        GroupOperation groupByStateAndAvgStars = group("state").avg("$reviews.stars").as("avgStars");
+        GroupOperation groupByStateAndAvgStars = group("state").avg("$stars").as("avgStars");
         SortOperation sortByAvgStarsState = sort(Sort.by(Sort.Direction.DESC, "avgStars"));
-        Aggregation aggregation = newAggregation(onlyUsa, unwindReviews, groupByStateAndAvgStars, sortByAvgStarsState);
+        Aggregation aggregation = newAggregation(onlyUsa,groupByStateAndAvgStars, sortByAvgStarsState);
         try {
             List<StarsPerState> starsPerState = new ArrayList<>(
                     mongoTemplate.aggregate(aggregation,"business", StarsPerState.class).getMappedResults());
@@ -45,11 +44,11 @@ public class AggregationController {
 
     @GetMapping("/avgstarscity")
     public ResponseEntity<List<StarsPerCity>> getAverageStarsPerCity() {
-        UnwindOperation unwindReviews = unwind("reviews");
-        GroupOperation groupByCityAndAvgStars = group("city").avg("$reviews.stars").as("avgStars");
+        GroupOperation groupByStateAndAvgStars = group("city").avg("$stars").as("avgStars");
+        MatchOperation onlyRated = match(new Criteria("avgStars").ne(0));
         SortOperation sortByAvgStarsCity = sort(Sort.by(Sort.Direction.DESC, "avgStars"));
         LimitOperation limitToXDocs = limit(11);
-        Aggregation aggregation = newAggregation(unwindReviews,groupByCityAndAvgStars, sortByAvgStarsCity, limitToXDocs);
+        Aggregation aggregation = newAggregation(groupByStateAndAvgStars, onlyRated, sortByAvgStarsCity, limitToXDocs);
         try {
             List<StarsPerCity> starsPerCity = new ArrayList<>(
                     mongoTemplate.aggregate(aggregation,"business", StarsPerCity.class).getMappedResults());
@@ -64,7 +63,7 @@ public class AggregationController {
 
     @GetMapping("/maxreviewscity")
     public ResponseEntity<List<ReviewsPerCity>> getCityMaxReviews() {
-        MatchOperation reviewed = match(new Criteria("reviews.stars").gt(-1));
+        MatchOperation reviewed = match(new Criteria("stars").gt(0));
         ProjectionOperation project = project().andInclude("city").and("reviews").size().as("numberOfReviews");
         GroupOperation groupByCityAndAvgReviews = group("city").avg("numberOfReviews").as("avgReviews");
         SortOperation sortByAvgReviewsDecs = sort(Sort.by(Sort.Direction.DESC, "avgReviews"));
@@ -73,13 +72,11 @@ public class AggregationController {
         try {
             List<ReviewsPerCity> reviewsPerCity = new ArrayList<>(
                     mongoTemplate.aggregate(aggregation,"business", ReviewsPerCity.class).getMappedResults());
-
             if(reviewsPerCity.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(reviewsPerCity, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

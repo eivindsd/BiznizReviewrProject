@@ -47,18 +47,10 @@ public class UserController {
     @GetMapping("/user/search/{name}")
     @Query()
     public ResponseEntity<List<User>> getAllUsersContainingString(@PathVariable("name") String name) {
-        List<User> users = new ArrayList<>();
-        List<User> allUsers = userRepository.findAll();
-        for (User u: allUsers) {
-            if (u.getName().contains(name) & users.size() < 10) {
-                users.add(u);
-            }
-            if (users.size() == 10) {
-                break;
-            }
-        }
-        if (!users.isEmpty()) {
-            return new ResponseEntity<>(users, HttpStatus.OK);
+        List<User> allUsers = userRepository.findByNameStartingWith(name);
+
+        if (!allUsers.isEmpty()) {
+            return new ResponseEntity<>(allUsers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -67,7 +59,6 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            //theoretically there might be generated users with same userid now
             User _user = userRepository.save(new User(user.getUserId(), user.getName(), user.getPassword()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -93,9 +84,6 @@ public class UserController {
             }
             if (user.getPassword() != null) {
                 _user.setPassword(user.getPassword());
-            }
-            if (user.getReviews() != null) {
-                _user.setReviews(user.getReviews());
             }
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         } else {
