@@ -14,6 +14,6 @@ public interface BusinessGraphRepository extends Neo4jRepository<BusinessGraphEn
     void deleteByBusinessId(String businessId);
 
     @Query(value = "MATCH (a:User {userId: $userId })-[:FOLLOWS]->(friend)-[:REVIEWEDBUSINESS]->(suggestion)" +
-            "RETURN suggestion" )
+            "RETURN suggestion LIMIT 10" )
     List<BusinessGraphEntity> getSuggestions(@Param("userId") String userId);
 }
