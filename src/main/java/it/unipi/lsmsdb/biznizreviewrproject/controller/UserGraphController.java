@@ -23,10 +23,12 @@ public class UserGraphController {
     private final UserGraphRepository userGraphRepository;
     private final BusinessGraphRepository businessGraphRepository;
 
-    @GetMapping(value = "/")
+  /*  @GetMapping(value = "/")
     public List<UserGraphEntity> all() {
         return this.userGraphRepository.findAll();
     }
+
+   */
 
     @GetMapping(value = "/{userId}")
     public ResponseEntity<UserGraphEntity> getUserById(@PathVariable("userId") String userId) {
@@ -43,7 +45,6 @@ public class UserGraphController {
     public ResponseEntity<List<UserGraphEntity>> getFollowing(@PathVariable("userId") String userId) {
         try {
             List<UserGraphEntity> following = userGraphRepository.getFollowing(userId);
-            System.out.println(following);
             return new ResponseEntity<>(following, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -55,7 +56,6 @@ public class UserGraphController {
     public ResponseEntity<List<UserGraphEntity>> getSuggestion(@PathVariable("userId") String userId) {
         try {
             List<UserGraphEntity> suggestions = userGraphRepository.getSuggestions(userId);
-            System.out.println(suggestions);
             return new ResponseEntity<>(suggestions, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -93,13 +93,15 @@ public class UserGraphController {
     public ResponseEntity<UserGraphEntity> follow(@PathVariable("userId1") String userId1, @PathVariable("userId2") String userId2) {
         Optional<UserGraphEntity> user1 = Optional.ofNullable(userGraphRepository.findByUserId(userId1));
         Optional<UserGraphEntity> user2 = Optional.ofNullable(userGraphRepository.findByUserId(userId2));
-
+        System.out.println(user1);
+        System.out.println(user2);
         if (user1.isPresent() && user2.isPresent()) {
             UserGraphEntity _user = user1.get();
             Set<UserGraphEntity> follows = _user.getFollows();
             follows.add(user2.get());
             return new ResponseEntity<>(userGraphRepository.save(_user), HttpStatus.OK);
         } else {
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

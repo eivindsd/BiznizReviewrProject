@@ -12,7 +12,10 @@ import java.util.List;
 
 public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, String> {
 
-    UserGraphEntity findByUserId(String userId);
+
+    @Query(value = "MATCH (a:User {userId: $userId}) RETURN a")
+    UserGraphEntity findByUserId(@Param("userId") String userId);
+
     void deleteByUserId(String userId);
 
 
@@ -22,7 +25,7 @@ public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, St
 
 
     @Query(value = "MATCH (a:User {userId: $userId })-[:FOLLOWS]->(friend)-[:FOLLOWS]->(suggestion)" +
-            "RETURN suggestion LIMIT 10" )
+            "WHERE suggestion.userId <> $userId RETURN suggestion LIMIT 10" )
     List<UserGraphEntity> getSuggestions(@Param("userId") String userId);
 
 

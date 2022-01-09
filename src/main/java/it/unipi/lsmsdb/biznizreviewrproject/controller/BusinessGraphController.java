@@ -19,14 +19,6 @@ import java.util.UUID;
 public class BusinessGraphController {
     private final BusinessGraphRepository businessGraphRepository;
 
-    /*
-    @GetMapping(value = "/")
-    public List<BusinessGraphEntity> all() {
-        return this.businessGraphRepository.findAll();
-    }
-
-     */
-
     @PostMapping(value = "/")
     public ResponseEntity<BusinessGraphEntity> createUser(@RequestBody BusinessGraphEntity business) {
         try {
@@ -35,7 +27,6 @@ public class BusinessGraphController {
             //    userId = UUID.randomUUID().toString();
             // }
             BusinessGraphEntity _business = businessGraphRepository.save(new BusinessGraphEntity(userId, business.getName()));
-            System.out.println("Saved user" + _business);
             return new ResponseEntity<>(_business, HttpStatus.CREATED);
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -62,7 +53,6 @@ public class BusinessGraphController {
     public ResponseEntity<List<BusinessGraphEntity>> getSuggestion(@PathVariable("userId") String userId) {
         try {
             List<BusinessGraphEntity> suggestions = businessGraphRepository.getSuggestions(userId);
-            System.out.println(suggestions);
             return new ResponseEntity<>(suggestions, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.toString());
