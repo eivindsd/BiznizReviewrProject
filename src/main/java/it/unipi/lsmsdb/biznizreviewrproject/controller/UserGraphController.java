@@ -64,7 +64,7 @@ public class UserGraphController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<UserGraphEntity> createUser(@RequestBody UserGraphEntity user) {
+    public ResponseEntity<UserGraphEntity> createUser(@RequestBody User user) {
         try {
             UserGraphEntity _user = userGraphRepository.save(new UserGraphEntity(user.getUserId(), user.getName()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);

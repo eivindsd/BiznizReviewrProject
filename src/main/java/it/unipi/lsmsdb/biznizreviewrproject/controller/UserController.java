@@ -1,6 +1,8 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.User;
+import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
+import it.unipi.lsmsdb.biznizreviewrproject.repository.UserGraphRepository;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,11 +58,21 @@ public class UserController {
 
     }
 
+    @Autowired
+    UserGraphController userGraphController;
+
     @PostMapping("/user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            User _user = userRepository.save(new User(user.getUserId(), user.getName(), user.getPassword()));
-            return new ResponseEntity<>(_user, HttpStatus.CREATED);
+            ResponseEntity<User> _user = new ResponseEntity<>(userRepository.save(new User(user.getUserId(), user.getName(), user.getPassword())), HttpStatus.CREATED);
+            if (_user.getStatusCodeValue() == 201) {
+                ResponseEntity<UserGraphEntity> graphUser = userGraphController.createUser(user);
+                if (graphUser.getStatusCodeValue() != 201) {
+                    deleteUser(user.getUserId());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+            return _user;
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
