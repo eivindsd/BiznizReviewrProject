@@ -65,7 +65,7 @@ public class AggregationController {
 
     @GetMapping("/maxreviewscity")
     public ResponseEntity<List<ReviewsPerCity>> getCityMaxReviews() {
-        MatchOperation reviewed = match(new Criteria("reviews.stars").gt(-1));
+        MatchOperation reviewed = match(new Criteria("city").ne(null));
         ProjectionOperation project = project().andInclude("city").and("reviews").size().as("numberOfReviews");
         GroupOperation groupByCityAndAvgReviews = group("city").avg("numberOfReviews").as("avgReviews");
         SortOperation sortByAvgReviewsDecs = sort(Sort.by(Sort.Direction.DESC, "avgReviews"));
@@ -85,7 +85,7 @@ public class AggregationController {
 
     @GetMapping("/amountofstarsperbusiness/{businessId}")
     public ResponseEntity<StarsPerBusiness> getStarsPerBusiness(@PathVariable("businessId") String businessId) {
-        MatchOperation matchBusinessId = match(new Criteria("businessId").is(businessId).and("stars").gt(-1));
+        MatchOperation matchBusinessId = match(new Criteria("businessId").is(businessId));
         UnwindOperation unwindReviews = unwind("reviews");
         GroupOperation groupByStars = group("businessId")
                 .sum(ConditionalOperators.when(Criteria.where("reviews.stars").is(5))

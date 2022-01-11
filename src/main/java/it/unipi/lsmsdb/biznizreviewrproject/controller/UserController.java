@@ -85,6 +85,7 @@ public class UserController {
             if (user.getPassword() != null) {
                 _user.setPassword(user.getPassword());
             }
+
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
