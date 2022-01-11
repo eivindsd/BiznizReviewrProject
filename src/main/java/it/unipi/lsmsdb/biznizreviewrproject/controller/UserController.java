@@ -145,8 +145,15 @@ public class UserController {
     @DeleteMapping("user/{userId}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
         try {
-            userRepository.deleteByUserId(userId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            ResponseEntity<User> deleteResponse = new ResponseEntity<>(userRepository.deleteByUserId(userId), HttpStatus.OK);
+            if (deleteResponse.getStatusCodeValue() == 200) {
+                ResponseEntity<UserGraphEntity> graphUserResponse = userGraphController.deleteUser(userId);
+                if (graphUserResponse.getStatusCodeValue() != 200) {
+                    createUser(deleteResponse.getBody());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,6 +1,7 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
 import it.unipi.lsmsdb.biznizreviewrproject.model.Business;
+import it.unipi.lsmsdb.biznizreviewrproject.model.BusinessGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -116,14 +117,24 @@ public class BusinessController {
         }
     }
 
+    @Autowired
+    BusinessGraphController businessGraphController;
+
     @PostMapping("/business")
     public ResponseEntity<Business> createBusiness(@RequestBody Business business) {
         try {
             UUID uuid = UUID.randomUUID();
             String uuidAsString = uuid.toString();
-            Business _business = businessRepository.save(new Business(uuidAsString, business.getName(),
-            business.getCountry(), business.getCity(), business.getState(), business.getTopTags(), business.getCategories(), null));
-            return new ResponseEntity<>(_business, HttpStatus.CREATED);
+            ResponseEntity<Business> _business = new ResponseEntity<>(businessRepository.save(new Business(uuidAsString, business.getName(),
+            business.getCountry(), business.getCity(), business.getState(), business.getTopTags(), business.getCategories(), null)), HttpStatus.CREATED);
+            if (_business.getStatusCodeValue() == 201) {
+                ResponseEntity<BusinessGraphEntity> graphBusiness = businessGraphController.createBusiness(business, uuidAsString);
+                if (graphBusiness.getStatusCodeValue() != 201) {
+                    deleteBusiness(business.getBusinessId());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+            return _business;
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -166,7 +177,14 @@ public class BusinessController {
     @DeleteMapping("/business/{businessid}")
     public ResponseEntity<HttpStatus> deleteBusiness(@PathVariable("businessid") String businessId) {
         try {
-            businessRepository.deleteByBusinessId(businessId);
+            ResponseEntity<Business> deleteResponse = new ResponseEntity<>(businessRepository.deleteByBusinessId(businessId), HttpStatus.OK);
+            if (deleteResponse.getStatusCodeValue() == 200) {
+                ResponseEntity<BusinessGraphEntity> graphBusinessResponse = businessGraphController.deleteUser(businessId);
+                if (graphBusinessResponse.getStatusCodeValue() != 200) {
+                    createBusiness(deleteResponse.getBody());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         }
          catch (Exception e) {
