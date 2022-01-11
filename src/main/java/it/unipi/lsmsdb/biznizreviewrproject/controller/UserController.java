@@ -147,7 +147,7 @@ public class UserController {
         try {
             ResponseEntity<User> deleteResponse = new ResponseEntity<>(userRepository.deleteByUserId(userId), HttpStatus.OK);
             if (deleteResponse.getStatusCodeValue() == 200) {
-                ResponseEntity<UserGraphEntity> graphUserResponse = userGraphController.deleteUser(userId);
+                ResponseEntity<HttpStatus> graphUserResponse = userGraphController.deleteUser(userId);
                 if (graphUserResponse.getStatusCodeValue() != 200) {
                     createUser(deleteResponse.getBody());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -16,7 +16,7 @@ public interface UserGraphRepository extends Neo4jRepository<UserGraphEntity, St
     @Query(value = "MATCH (a:User {userId: $userId}) RETURN a")
     UserGraphEntity findByUserId(@Param("userId") String userId);
 
-    UserGraphEntity deleteByUserId(String userId);
+    void deleteByUserId(String userId);
 
 
     @Query(value = "MATCH (a:User {userId: $userId })-[r:FOLLOWS]-(b)\n" +

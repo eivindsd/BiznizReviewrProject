@@ -11,7 +11,7 @@ import java.util.List;
 public interface BusinessGraphRepository extends Neo4jRepository<BusinessGraphEntity, String> {
 
     BusinessGraphEntity findByBusinessId(String businessId);
-    BusinessGraphEntity deleteByBusinessId(String businessId);
+    void deleteByBusinessId(String businessId);
 
     @Query(value = "MATCH (a:User {userId: $userId })-[:FOLLOWS]->(friend)-[:REVIEWEDBUSINESS]->(suggestion)" +
             "WHERE suggestion.name IS NOT NULL RETURN suggestion LIMIT 10" )

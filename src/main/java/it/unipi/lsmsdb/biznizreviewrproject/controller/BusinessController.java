@@ -179,7 +179,7 @@ public class BusinessController {
         try {
             ResponseEntity<Business> deleteResponse = new ResponseEntity<>(businessRepository.deleteByBusinessId(businessId), HttpStatus.OK);
             if (deleteResponse.getStatusCodeValue() == 200) {
-                ResponseEntity<BusinessGraphEntity> graphBusinessResponse = businessGraphController.deleteUser(businessId);
+                ResponseEntity<HttpStatus> graphBusinessResponse = businessGraphController.deleteUser(businessId);
                 if (graphBusinessResponse.getStatusCodeValue() != 200) {
                     createBusiness(deleteResponse.getBody());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -123,10 +123,10 @@ public class UserGraphController {
     }
 
     @DeleteMapping(value = "/{userId}")
-    public ResponseEntity<UserGraphEntity> deleteUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
         try {
-            UserGraphEntity _userGraph = userGraphRepository.deleteByUserId(userId);
-            return new ResponseEntity<>(_userGraph, HttpStatus.OK);
+            userGraphRepository.deleteByUserId(userId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

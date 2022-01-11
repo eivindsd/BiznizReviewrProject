@@ -58,10 +58,10 @@ public class BusinessGraphController {
     }
 
     @DeleteMapping(value = "/{businessId}")
-    public ResponseEntity<BusinessGraphEntity> deleteUser(@PathVariable("businessId") String businessId) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("businessId") String businessId) {
         try {
-            BusinessGraphEntity _business = businessGraphRepository.deleteByBusinessId(businessId);
-            return new ResponseEntity<>(_business, HttpStatus.OK);
+            businessGraphRepository.deleteByBusinessId(businessId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
