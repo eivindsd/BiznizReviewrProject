@@ -122,7 +122,7 @@ public class BusinessController {
             UUID uuid = UUID.randomUUID();
             String uuidAsString = uuid.toString();
             Business _business = businessRepository.save(new Business(uuidAsString, business.getName(),
-            business.getCountry(), business.getCity(), business.getState(), business.getTopTags(), business.getStars(), business.getCategories(), null));
+            business.getCountry(), business.getCity(), business.getState(), business.getTopTags(), business.getCategories(), null));
             return new ResponseEntity<>(_business, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -148,9 +148,6 @@ public class BusinessController {
             }
             if(business.getTopTags() != null) {
                 _business.setTopTags(business.getTopTags());
-            }
-            if(business.getStars() != 0) {
-                _business.setStars(business.getStars());
             }
             if(business.getCategories() != null) {
                 _business.setCategories(business.getCategories());

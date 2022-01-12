@@ -16,18 +16,16 @@ public class Business {
     private String city;
     private String state;
     private List<String> topTags;
-    private int stars;
     private List<String> categories;
     private List<Review> reviews;
 
-    public Business(String businessId, String name, String country, String city, String state, List<String> topTags, int stars, List<String> categories, List<Review> reviews) {
+    public Business(String businessId, String name, String country, String city, String state, List<String> topTags, List<String> categories, List<Review> reviews) {
         this.businessId = businessId;
         this.name = name;
         this.country = country;
         this.city = city;
         this.state = state;
         this.topTags = topTags;
-        this.stars = stars;
         this.categories = categories;
         this.reviews = reviews;
     }
@@ -78,14 +76,6 @@ public class Business {
 
     public void setTopTags(List<String> topTags) {
         this.topTags = topTags;
-    }
-
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
     }
 
     public List<String> getCategories() {
