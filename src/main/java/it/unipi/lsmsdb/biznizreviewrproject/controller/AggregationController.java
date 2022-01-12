@@ -65,7 +65,7 @@ public class AggregationController {
 
     @GetMapping("/maxreviewscity")
     public ResponseEntity<List<ReviewsPerCity>> getCityMaxReviews() {
-        MatchOperation reviewed = match(new Criteria("city").ne(null));
+        MatchOperation reviewed = match(new Criteria("reviews.stars").gt(-1));
         ProjectionOperation project = project().andInclude("city").and("reviews").size().as("numberOfReviews");
         GroupOperation groupByCityAndAvgReviews = group("city").avg("numberOfReviews").as("avgReviews");
         SortOperation sortByAvgReviewsDecs = sort(Sort.by(Sort.Direction.DESC, "avgReviews"));

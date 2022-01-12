@@ -64,7 +64,8 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            ResponseEntity<User> _user = new ResponseEntity<>(userRepository.save(new User(user.getUserId(), user.getName(), user.getPassword())), HttpStatus.CREATED);
+            ResponseEntity<User> _user = new ResponseEntity<>(userRepository.save(new User(user.getUserId(), user.getName(),
+                    user.getPassword())), HttpStatus.CREATED);
             if (_user.getStatusCodeValue() == 201) {
                 ResponseEntity<UserGraphEntity> graphUser = userGraphController.createUser(user);
                 if (graphUser.getStatusCodeValue() != 201) {
