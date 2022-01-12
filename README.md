@@ -1,0 +1,2 @@
+# BiznizReviewrProject
+Project in 883II 21/22 - LARGE-SCALE AND MULTI-STRUCTURED DATABASES
