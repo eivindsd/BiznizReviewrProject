@@ -130,7 +130,8 @@ public class AggregationController {
         try {
             StarsPerUser starsPerUser = mongoTemplate.aggregate(aggregation,"user", StarsPerUser.class).getUniqueMappedResult();
             if(starsPerUser == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                StarsPerUser emptyStars = new StarsPerUser(0,0,0,0,0);
+                return new ResponseEntity<>(emptyStars, HttpStatus.OK);
             }
             return new ResponseEntity<>(starsPerUser, HttpStatus.OK);
         } catch (Exception e) {

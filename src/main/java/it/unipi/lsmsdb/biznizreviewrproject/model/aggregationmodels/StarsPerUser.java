@@ -12,6 +12,14 @@ public class StarsPerUser {
     private int amountTwo;
     private int amountOne;
 
+    public StarsPerUser(int amountFive, int amountFour, int amountThree, int amountTwo, int amountOne) {
+        this.amountFive = amountFive;
+        this.amountFour = amountFour;
+        this.amountThree = amountThree;
+        this.amountTwo = amountTwo;
+        this.amountOne = amountOne;
+    }
+
     public String getUserId() {
         return userId;
     }
