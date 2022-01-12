@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.biznizreviewrproject.controller;
 
+import it.unipi.lsmsdb.biznizreviewrproject.model.Business;
 import it.unipi.lsmsdb.biznizreviewrproject.model.BusinessGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.model.UserGraphEntity;
 import it.unipi.lsmsdb.biznizreviewrproject.repository.BusinessGraphRepository;
@@ -20,13 +21,9 @@ public class BusinessGraphController {
     private final BusinessGraphRepository businessGraphRepository;
 
     @PostMapping(value = "/")
-    public ResponseEntity<BusinessGraphEntity> createUser(@RequestBody BusinessGraphEntity business) {
+    public ResponseEntity<BusinessGraphEntity> createBusiness(@RequestBody Business business, String uuid) {
         try {
-            String userId = UUID.randomUUID().toString();
-            //  while (userGraphRepository.findById(userId) != null) {
-            //    userId = UUID.randomUUID().toString();
-            // }
-            BusinessGraphEntity _business = businessGraphRepository.save(new BusinessGraphEntity(userId, business.getName()));
+            BusinessGraphEntity _business = businessGraphRepository.save(new BusinessGraphEntity(uuid, business.getName()));
             return new ResponseEntity<>(_business, HttpStatus.CREATED);
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -64,7 +61,7 @@ public class BusinessGraphController {
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("businessId") String businessId) {
         try {
             businessGraphRepository.deleteByBusinessId(businessId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
